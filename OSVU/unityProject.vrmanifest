@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.osvu.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "C:\\Users\\EKC Computer Crew\\Documents\\GitHub\\OSVU\\OSVU\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "OSVU [Testing]"
+        }
+      }
+    }
+  ]
+}
