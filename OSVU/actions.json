@@ -6,7 +6,8 @@
     },
     {
       "name": "/actions/default/in/Teleport",
-      "type": "boolean"
+      "type": "boolean",
+      "requirement": "suggested"
     },
     {
       "name": "/actions/default/in/GrabPinch",
@@ -39,6 +40,11 @@
       "name": "/actions/default/in/HeadsetOnHead",
       "type": "boolean",
       "requirement": "optional"
+    },
+    {
+      "name": "/actions/default/in/TouchPosition",
+      "type": "vector2",
+      "requirement": "mandatory"
     },
     {
       "name": "/actions/default/out/Haptic",
@@ -109,7 +115,8 @@
       "/actions/default/in/SkeletonLeftHand": "Skeleton (Left)",
       "/actions/default/in/SkeletonRightHand": "Skeleton (Right)",
       "/actions/default/in/Teleport": "Teleport",
-      "/actions/default/out/Haptic": "Haptic"
+      "/actions/default/out/Haptic": "Haptic",
+      "/actions/default/in/TouchPosition": "TouchPosition"
     }
   ]
 }
