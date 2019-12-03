@@ -55,20 +55,6 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/grabgrip"
-                  }
-               },
-               "mode" : "button",
-               "parameters" : {
-                  "click_activate_threshold" : "0.05",
-                  "click_deactivate_threshold" : "0",
-                  "force_input" : "force"
-               },
-               "path" : "/user/hand/left/input/grip"
-            },
-            {
-               "inputs" : {
-                  "click" : {
                      "output" : "/actions/default/in/grabpinch"
                   }
                },
@@ -104,20 +90,6 @@
             },
             {
                "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/grabgrip"
-                  }
-               },
-               "mode" : "button",
-               "parameters" : {
-                  "click_activate_threshold" : "0.05",
-                  "click_deactivate_threshold" : "0",
-                  "force_input" : "force"
-               },
-               "path" : "/user/hand/right/input/grip"
-            },
-            {
-               "inputs" : {
                   "pull" : {
                      "output" : "/actions/default/in/squeeze"
                   }
@@ -145,15 +117,6 @@
             },
             {
                "inputs" : {
-                  "position" : {
-                     "output" : "/actions/default/in/touchposition"
-                  }
-               },
-               "mode" : "trackpad",
-               "path" : "/user/hand/right/input/trackpad"
-            },
-            {
-               "inputs" : {
                   "click" : {
                      "output" : "/actions/default/in/teleport"
                   }
@@ -164,11 +127,20 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/teleport"
+                     "output" : "/actions/default/in/grabgripleft"
                   }
                },
                "mode" : "button",
-               "path" : "/user/hand/right/input/trackpad"
+               "path" : "/user/hand/left/input/grip"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/grabgripright"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/grip"
             }
          ]
       },
@@ -183,7 +155,7 @@
    "category" : "steamvr_input",
    "controller_type" : "vive_controller",
    "description" : "",
-   "name" : "Recomended OSVU Bindings",
+   "name" : "Recommended OSVU Bindings",
    "options" : {},
    "simulated_actions" : []
 }

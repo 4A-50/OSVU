@@ -8,7 +8,10 @@ public class VRController : MonoBehaviour
     public float m_Sensitivity = 0.1f;
     public float m_MaxSpeed = 0.1f;
     public float m_Gravity = 200f;
-    
+
+    [HideInInspector]
+    public bool m_AllowFall = true;
+
     public SteamVR_Action_Vector2 m_MoveValue = null;
 
     private float m_Speed = 0.0f;
@@ -60,24 +63,27 @@ public class VRController : MonoBehaviour
     /// </summary>
     private void CalculateMovement()
     {
-        float rotation = Mathf.Atan2(m_MoveValue.axis.x, m_MoveValue.axis.y);
-        rotation *= Mathf.Rad2Deg;
-        Vector3 orientationEuler = new Vector3(0, transform.eulerAngles.y + rotation, 0);
-        Quaternion orientation = Quaternion.Euler(orientationEuler);
-        Vector3 movement = Vector3.zero;
+        if (m_AllowFall == true)
+        {
+            float rotation = Mathf.Atan2(m_MoveValue.axis.x, m_MoveValue.axis.y);
+            rotation *= Mathf.Rad2Deg;
+            Vector3 orientationEuler = new Vector3(0, transform.eulerAngles.y + rotation, 0);
+            Quaternion orientation = Quaternion.Euler(orientationEuler);
+            Vector3 movement = Vector3.zero;
 
-        if (m_MoveValue.axis.magnitude == 0)
-            m_Speed = 0;
+            if (m_MoveValue.axis.magnitude == 0)
+                m_Speed = 0;
 
 
-        m_Speed += m_MoveValue.axis.magnitude * m_Sensitivity;
-        m_Speed = Mathf.Clamp(m_Speed, -m_MaxSpeed, m_MaxSpeed);
+            m_Speed += m_MoveValue.axis.magnitude * m_Sensitivity;
+            m_Speed = Mathf.Clamp(m_Speed, -m_MaxSpeed, m_MaxSpeed);
 
-        movement += orientation * (m_Speed * Vector3.forward);
+            movement += orientation * (m_Speed * Vector3.forward);
 
-        movement.y -= m_Gravity * Time.deltaTime;
+            movement.y -= m_Gravity * Time.deltaTime;
 
-        m_CharacterController.Move(movement * Time.deltaTime);
+            m_CharacterController.Move(movement * Time.deltaTime);
+        }
     }
 
     /// <summary>
