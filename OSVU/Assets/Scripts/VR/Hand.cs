@@ -5,6 +5,9 @@ using Valve.VR;
 
 public class Hand : MonoBehaviour
 {
+    public enum handType {Left, Right};
+    public handType m_Hand;
+
     public SteamVR_Action_Boolean m_GrabAction = null;
 
     private SteamVR_Behaviour_Pose m_Pose = null;
@@ -15,6 +18,8 @@ public class Hand : MonoBehaviour
     private List<Interactable> m_ContactInteractables = new List<Interactable>();
 
     private VRController m_VRController = null;
+
+    private bool m_FreezeHand = false;
 
     private void Awake()
     {
@@ -140,14 +145,30 @@ public class Hand : MonoBehaviour
 
     public void Grab()
     {
-        m_VRController.m_AllowFall = false;
+        if (m_Hand == handType.Left)
+        {
+            m_VRController.m_LeftGrabed = true;
+        }
+        else if (m_Hand == handType.Right)
+        {
+            m_VRController.m_RightGrabed = true;
+        }
+
         m_Pose.enabled = false;
         m_Skeleton.enabled = false;
     }
 
     public void Release()
     {
-        m_VRController.m_AllowFall = true;
+        if (m_Hand == handType.Left)
+        {
+            m_VRController.m_LeftGrabed = false;
+        }
+        else if (m_Hand == handType.Right)
+        {
+            m_VRController.m_RightGrabed = false;
+        }
+
         m_Pose.enabled = true;
         m_Skeleton.enabled = true;
     }

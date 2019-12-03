@@ -10,7 +10,10 @@ public class VRController : MonoBehaviour
     public float m_Gravity = 200f;
 
     [HideInInspector]
-    public bool m_AllowFall = true;
+    public bool m_LeftGrabed = false;
+    [HideInInspector]
+    public bool m_RightGrabed = false;
+    private bool m_AllowFall = true;
 
     public SteamVR_Action_Vector2 m_MoveValue = null;
 
@@ -33,6 +36,9 @@ public class VRController : MonoBehaviour
     
     private void Update()
     {
+        if (m_LeftGrabed == true || m_RightGrabed == true)
+            m_AllowFall = false;
+
         HandleHead();
         HandleHeight();
         CalculateMovement();
