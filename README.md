@@ -5,3 +5,6 @@ Open Source Virtual Universe, is a VR MMORPG where u can travel this universe to
 https://app.gitkraken.com/glo/board/XeTm5ecC6AAPsU5b
 
 ![OSVU Social Preview](https://i.imgur.com/Zx20z0n.png "OSVU")
+
+### Credit To:
+[MyBox By Deadcows](https://github.com/Deadcows/MyBox "MyBox")
