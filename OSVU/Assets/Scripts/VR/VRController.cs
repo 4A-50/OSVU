@@ -8,12 +8,9 @@ public class VRController : MonoBehaviour
     public float m_Sensitivity = 0.1f;
     public float m_MaxSpeed = 0.1f;
     public float m_Gravity = 200f;
+    public float m_ClimbSensitivity = 45f;
 
-    [HideInInspector]
-    public bool m_LeftGrabed = false;
-    [HideInInspector]
-    public bool m_RightGrabed = false;
-    private bool m_AllowFall = true;
+    private Hand m_CurrentClimbHand = null;
 
     public SteamVR_Action_Vector2 m_MoveValue = null;
 
@@ -36,9 +33,6 @@ public class VRController : MonoBehaviour
     
     private void Update()
     {
-        if (m_LeftGrabed == true || m_RightGrabed == true)
-            m_AllowFall = false;
-
         HandleHead();
         HandleHeight();
         CalculateMovement();
@@ -69,13 +63,14 @@ public class VRController : MonoBehaviour
     /// </summary>
     private void CalculateMovement()
     {
-        if (m_AllowFall == true)
+        Vector3 movement = Vector3.zero;
+
+        if (!m_CurrentClimbHand)
         {
             float rotation = Mathf.Atan2(m_MoveValue.axis.x, m_MoveValue.axis.y);
             rotation *= Mathf.Rad2Deg;
             Vector3 orientationEuler = new Vector3(0, transform.eulerAngles.y + rotation, 0);
             Quaternion orientation = Quaternion.Euler(orientationEuler);
-            Vector3 movement = Vector3.zero;
 
             if (m_MoveValue.axis.magnitude == 0)
                 m_Speed = 0;
@@ -87,9 +82,13 @@ public class VRController : MonoBehaviour
             movement += orientation * (m_Speed * Vector3.forward);
 
             movement.y -= m_Gravity * Time.deltaTime;
-
-            m_CharacterController.Move(movement * Time.deltaTime);
         }
+        else
+        {
+            movement += m_CurrentClimbHand.m_Delta * m_ClimbSensitivity;
+        }
+
+        m_CharacterController.Move(movement * Time.deltaTime);
     }
 
     /// <summary>
@@ -112,5 +111,25 @@ public class VRController : MonoBehaviour
         newCenter = Quaternion.Euler(0, -transform.eulerAngles.y, 0) * newCenter;
 
         m_CharacterController.center = newCenter;
+    }
+
+    /// <summary>
+    /// Sets The Hand Thats Being Used For Climbing
+    /// </summary>
+    /// <param name="hand">Climbing Hand</param>
+    public void SetHand(Hand hand)
+    {
+        if (m_CurrentClimbHand)
+            m_CurrentClimbHand.Release();
+
+        m_CurrentClimbHand = hand;
+    }
+
+    /// <summary>
+    /// Clears The Climbing Hand 
+    /// </summary>
+    public void ClearHand()
+    {
+        m_CurrentClimbHand = null;
     }
 }

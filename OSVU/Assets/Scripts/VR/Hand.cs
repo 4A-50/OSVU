@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
+using MyBox;
 
 public class Hand : MonoBehaviour
 {
-    public enum handType {Left, Right};
-    public handType m_Hand;
-
     public SteamVR_Action_Boolean m_GrabAction = null;
+
+    [Tag]
+    public string m_InteractableTag;
+
+    public Vector3 m_Delta { private set; get; } = Vector3.zero;
+
+    private Vector3 m_LastPosition = Vector3.zero;
 
     private SteamVR_Behaviour_Pose m_Pose = null;
     private SteamVR_Behaviour_Skeleton m_Skeleton = null;
@@ -27,6 +32,11 @@ public class Hand : MonoBehaviour
         m_Skeleton = GetComponent<SteamVR_Behaviour_Skeleton>();
         m_Joint = GetComponent<FixedJoint>();
         m_VRController = transform.parent.GetComponentInParent<VRController>();
+    }
+
+    private void Start()
+    {
+        m_LastPosition = transform.position;
     }
 
     private void Update()
@@ -76,9 +86,19 @@ public class Hand : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        m_LastPosition = transform.position;
+    }
+
+    private void LateUpdate()
+    {
+        m_Delta = m_LastPosition - transform.position;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.gameObject.CompareTag("Interactable"))
+        if (!other.gameObject.CompareTag(m_InteractableTag))
             return;
 
         m_ContactInteractables.Add(other.gameObject.GetComponent<Interactable>());
@@ -86,7 +106,7 @@ public class Hand : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.gameObject.CompareTag("Interactable"))
+        if (!other.gameObject.CompareTag(m_InteractableTag))
             return;
 
         m_ContactInteractables.Remove(other.gameObject.GetComponent<Interactable>());
@@ -145,31 +165,11 @@ public class Hand : MonoBehaviour
 
     public void Grab()
     {
-        if (m_Hand == handType.Left)
-        {
-            m_VRController.m_LeftGrabed = true;
-        }
-        else if (m_Hand == handType.Right)
-        {
-            m_VRController.m_RightGrabed = true;
-        }
-
-        m_Pose.enabled = false;
-        m_Skeleton.enabled = false;
+        m_VRController.SetHand(this);
     }
 
     public void Release()
     {
-        if (m_Hand == handType.Left)
-        {
-            m_VRController.m_LeftGrabed = false;
-        }
-        else if (m_Hand == handType.Right)
-        {
-            m_VRController.m_RightGrabed = false;
-        }
-
-        m_Pose.enabled = true;
-        m_Skeleton.enabled = true;
+        m_VRController.ClearHand();
     }
 }
