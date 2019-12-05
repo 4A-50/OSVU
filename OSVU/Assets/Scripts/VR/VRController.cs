@@ -10,6 +10,8 @@ public class VRController : MonoBehaviour
     public float m_Gravity = 200f;
     public float m_ClimbSensitivity = 45f;
 
+    [HideInInspector]
+    public bool m_AllowFall = true;
     private Hand m_CurrentClimbHand = null;
 
     public SteamVR_Action_Vector2 m_MoveValue = null;
@@ -65,7 +67,7 @@ public class VRController : MonoBehaviour
     {
         Vector3 movement = Vector3.zero;
 
-        if (!m_CurrentClimbHand)
+        if (m_AllowFall == true)
         {
             float rotation = Mathf.Atan2(m_MoveValue.axis.x, m_MoveValue.axis.y);
             rotation *= Mathf.Rad2Deg;

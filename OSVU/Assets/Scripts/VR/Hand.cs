@@ -165,11 +165,13 @@ public class Hand : MonoBehaviour
 
     public void Grab()
     {
+        m_VRController.m_AllowFall = false;
         m_VRController.SetHand(this);
     }
 
     public void Release()
     {
         m_VRController.ClearHand();
+        m_VRController.m_AllowFall = true;
     }
 }
