@@ -41,11 +41,11 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean GrabGripLeft
+        public virtual SteamVR_Action_Boolean GrabGrip
         {
             get
             {
-                return SteamVR_Actions.default_GrabGripLeft;
+                return SteamVR_Actions.default_GrabGrip;
             }
         }
         
@@ -94,14 +94,6 @@ namespace Valve.VR
             get
             {
                 return SteamVR_Actions.default_TouchPosition;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean GrabGripRight
-        {
-            get
-            {
-                return SteamVR_Actions.default_GrabGripRight;
             }
         }
         

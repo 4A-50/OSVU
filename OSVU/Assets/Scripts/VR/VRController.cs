@@ -10,8 +10,9 @@ public class VRController : MonoBehaviour
     public float m_Gravity = 200f;
     public float m_ClimbSensitivity = 45f;
 
-    [HideInInspector]
+    //[HideInInspector]
     public bool m_AllowFall = true;
+    [SerializeField]
     private Hand m_CurrentClimbHand = null;
 
     public SteamVR_Action_Vector2 m_MoveValue = null;

@@ -14,7 +14,7 @@
       "type": "boolean"
     },
     {
-      "name": "/actions/default/in/GrabGripLeft",
+      "name": "/actions/default/in/GrabGrip",
       "type": "boolean",
       "requirement": "mandatory"
     },
@@ -45,11 +45,6 @@
     {
       "name": "/actions/default/in/TouchPosition",
       "type": "vector2",
-      "requirement": "mandatory"
-    },
-    {
-      "name": "/actions/default/in/GrabGripRight",
-      "type": "boolean",
       "requirement": "mandatory"
     },
     {
@@ -122,8 +117,7 @@
       "/actions/default/in/Teleport": "Teleport",
       "/actions/default/out/Haptic": "Haptic",
       "/actions/default/in/TouchPosition": "TouchPosition",
-      "/actions/default/in/GrabGripRight": "GrabGripRight",
-      "/actions/default/in/GrabGripLeft": "GrabGripLeft"
+      "/actions/default/in/GrabGrip": "GrabGrip"
     }
   ]
 }

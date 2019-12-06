@@ -127,7 +127,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/grabgripleft"
+                     "output" : "/actions/default/in/grabgrip"
                   }
                },
                "mode" : "button",
@@ -136,7 +136,7 @@
             {
                "inputs" : {
                   "click" : {
-                     "output" : "/actions/default/in/grabgripright"
+                     "output" : "/actions/default/in/grabgrip"
                   }
                },
                "mode" : "button",

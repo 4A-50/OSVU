@@ -11,7 +11,7 @@ public class Hand : MonoBehaviour
     [Tag]
     public string m_InteractableTag;
 
-    public Vector3 m_Delta { private set; get; } = Vector3.zero;
+    public Vector3 m_Delta  = Vector3.zero;
 
     private Vector3 m_LastPosition = Vector3.zero;
 
@@ -21,10 +21,9 @@ public class Hand : MonoBehaviour
 
     private Interactable m_CurrentInteractable;
     private List<Interactable> m_ContactInteractables = new List<Interactable>();
+    private bool m_ObjectInHand = false;
 
     private VRController m_VRController = null;
-
-    private bool m_FreezeHand = false;
 
     private void Awake()
     {
@@ -41,47 +40,57 @@ public class Hand : MonoBehaviour
 
     private void Update()
     {
-        if (m_ContactInteractables.Count > 0)
+        if (m_ObjectInHand == false)
         {
-            m_CurrentInteractable = GetNearestInteractable();
-
-            if (m_CurrentInteractable.m_Climbable != true)
+            if (m_ContactInteractables.Count > 0)
             {
-                if (m_GrabAction.GetStateDown(m_Pose.inputSource) && m_CurrentInteractable.m_TogglePickUp == true)
+                m_CurrentInteractable = GetNearestInteractable();
+
+                if (m_CurrentInteractable.m_Climbable != true)
                 {
-                    if (m_CurrentInteractable.m_ActiveHand == null)
+                    if (m_GrabAction.GetStateDown(m_Pose.inputSource) && m_CurrentInteractable.m_TogglePickUp == true)
                     {
-                        Pickup();
+                        if (m_CurrentInteractable.m_ActiveHand == null)
+                        {
+                            Pickup();
+                        }
+                        else
+                        {
+                            Drop();
+                        }
                     }
-                    else
+                    else if (m_CurrentInteractable.m_TogglePickUp == false)
                     {
-                        Drop();
+                        if (m_GrabAction.GetStateDown(m_Pose.inputSource))
+                        {
+                            Pickup();
+                        }
+
+                        if (m_GrabAction.GetStateUp(m_Pose.inputSource))
+                        {
+                            Drop();
+                        }
                     }
                 }
-                else if (m_CurrentInteractable.m_TogglePickUp == false)
+                else
                 {
                     if (m_GrabAction.GetStateDown(m_Pose.inputSource))
                     {
-                        Pickup();
+                        Grab();
                     }
 
                     if (m_GrabAction.GetStateUp(m_Pose.inputSource))
                     {
-                        Drop();
+                        Release();
                     }
                 }
             }
-            else
+        }
+        else
+        {
+            if (m_GrabAction.GetStateUp(m_Pose.inputSource))
             {
-                if (m_GrabAction.GetStateDown(m_Pose.inputSource))
-                {
-                    Grab();
-                }
-
-                if (m_GrabAction.GetStateUp(m_Pose.inputSource))
-                {
-                    Release();
-                }
+                Release();
             }
         }
     }
@@ -165,6 +174,8 @@ public class Hand : MonoBehaviour
 
     public void Grab()
     {
+        transform.GetChild(0).gameObject.SetActive(false);
+        m_ObjectInHand = true;
         m_VRController.m_AllowFall = false;
         m_VRController.SetHand(this);
     }
@@ -173,5 +184,7 @@ public class Hand : MonoBehaviour
     {
         m_VRController.ClearHand();
         m_VRController.m_AllowFall = true;
+        m_ObjectInHand = false;
+        transform.GetChild(0).gameObject.SetActive(true);
     }
 }
