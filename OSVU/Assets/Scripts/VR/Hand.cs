@@ -6,159 +6,206 @@ using MyBox;
 
 public class Hand : MonoBehaviour
 {
-    public SteamVR_Action_Boolean m_GrabAction = null;
+    //The SteamVR Action Needed For A Grab
+    public SteamVR_Action_Boolean grabAction = null;
 
+    //The Interactable Tag
     [Tag]
-    public string m_InteractableTag;
+    public string interactableTag;
 
-    public Vector3 m_Delta  = Vector3.zero;
+    //The Hands Delta (Used For Climbing)
+    public Vector3 delta { private set; get; } = Vector3.zero;
+    //Hands Last Position
+    private Vector3 lastPosition = Vector3.zero;
 
-    private Vector3 m_LastPosition = Vector3.zero;
+    //Hand Controllers
+    private SteamVR_Behaviour_Pose pose = null;
+    private SteamVR_Behaviour_Skeleton skeleton = null;
+    private FixedJoint joint = null;
 
-    private SteamVR_Behaviour_Pose m_Pose = null;
-    private SteamVR_Behaviour_Skeleton m_Skeleton = null;
-    private FixedJoint m_Joint = null;
+    //Current In Hand Interactable
+    private Interactable currentInteractable = null;
+    //All The Nearby Interactables
+    private List<Interactable> contactInteractables = new List<Interactable>();
+    //Nearest Interactable
+    private Interactable nearestInteractable = null;
 
-    private Interactable m_CurrentInteractable;
-    private List<Interactable> m_ContactInteractables = new List<Interactable>();
-    private bool m_ObjectInHand = false;
-
-    private VRController m_VRController = null;
+    //The Controller Script
+    private VRController vrController = null;
 
     private void Awake()
     {
-        m_Pose = GetComponent<SteamVR_Behaviour_Pose>();
-        m_Skeleton = GetComponent<SteamVR_Behaviour_Skeleton>();
-        m_Joint = GetComponent<FixedJoint>();
-        m_VRController = transform.parent.GetComponentInParent<VRController>();
+        pose = GetComponent<SteamVR_Behaviour_Pose>();
+        skeleton = GetComponent<SteamVR_Behaviour_Skeleton>();
+        joint = GetComponent<FixedJoint>();
+        vrController = transform.parent.GetComponentInParent<VRController>();
     }
 
     private void Start()
     {
-        m_LastPosition = transform.position;
+        lastPosition = transform.position;
     }
 
     private void Update()
     {
-        if (m_ObjectInHand == false)
+        if (contactInteractables.Count > 0)
         {
-            if (m_ContactInteractables.Count > 0)
+            nearestInteractable = GetNearestInteractable();
+
+            if (nearestInteractable.climbable != true)
             {
-                m_CurrentInteractable = GetNearestInteractable();
-
-                if (m_CurrentInteractable.m_Climbable != true)
+                if (grabAction.GetStateDown(pose.inputSource) && nearestInteractable.holdType == Interactable.PickUpType.Toggle)
                 {
-                    if (m_GrabAction.GetStateDown(m_Pose.inputSource) && m_CurrentInteractable.m_TogglePickUp == true)
+                    if (nearestInteractable.activeHand == null)
                     {
-                        if (m_CurrentInteractable.m_ActiveHand == null)
-                        {
-                            Pickup();
-                        }
-                        else
-                        {
-                            Drop();
-                        }
+                        Pickup();
                     }
-                    else if (m_CurrentInteractable.m_TogglePickUp == false)
+                    else
                     {
-                        if (m_GrabAction.GetStateDown(m_Pose.inputSource))
-                        {
-                            Pickup();
-                        }
-
-                        if (m_GrabAction.GetStateUp(m_Pose.inputSource))
-                        {
-                            Drop();
-                        }
+                        Drop();
                     }
                 }
-                else
+                else if (nearestInteractable.holdType == Interactable.PickUpType.Hold)
                 {
-                    if (m_GrabAction.GetStateDown(m_Pose.inputSource))
+                    if (grabAction.GetStateDown(pose.inputSource))
                     {
-                        Grab();
+                        Pickup();
                     }
 
-                    if (m_GrabAction.GetStateUp(m_Pose.inputSource))
+                    if (grabAction.GetStateUp(pose.inputSource))
                     {
-                        Release();
+                        Drop();
                     }
                 }
             }
-        }
-        else
-        {
-            if (m_GrabAction.GetStateUp(m_Pose.inputSource))
+            else
             {
-                Release();
+                if (grabAction.GetStateDown(pose.inputSource))
+                {
+                    Grab();
+                }
+
+                if (grabAction.GetStateUp(pose.inputSource))
+                {
+                    Release();
+                }
             }
         }
     }
 
+    #region Climbing Delta
     private void FixedUpdate()
     {
-        m_LastPosition = transform.position;
+        lastPosition = transform.position;
     }
 
     private void LateUpdate()
     {
-        m_Delta = m_LastPosition - transform.position;
+        delta = lastPosition - transform.position;
     }
+    #endregion
 
+    /// <summary>
+    /// Adds Any Nearby Interactables Into The List Of Them.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.gameObject.CompareTag(m_InteractableTag))
+        if (!other.gameObject.CompareTag(interactableTag))
             return;
 
-        m_ContactInteractables.Add(other.gameObject.GetComponent<Interactable>());
+        contactInteractables.Add(other.gameObject.GetComponent<Interactable>());
     }
 
+    /// <summary>
+    /// Removes Any Interacatbles From The List When They Get Too Far Away.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
-        if (!other.gameObject.CompareTag(m_InteractableTag))
+        if (!other.gameObject.CompareTag(interactableTag))
             return;
 
-        m_ContactInteractables.Remove(other.gameObject.GetComponent<Interactable>());
+        contactInteractables.Remove(other.gameObject.GetComponent<Interactable>());
     }
 
+    /// <summary>
+    /// Used To Pickup Objects.
+    /// <para>
+    /// First Drops One If Its In The Hand Then Sets It's Location To The Hands,
+    /// Then Connects It Using The Joint,
+    /// Then It Sets It As The Current Interactable.
+    /// </para>
+    /// </summary>
     public void Pickup()
     {
-        if (!m_CurrentInteractable)
+        if (!currentInteractable)
             return;
 
-        if (m_CurrentInteractable.m_ActiveHand)
-            m_CurrentInteractable.m_ActiveHand.Drop();
+        if (currentInteractable.activeHand)
+            currentInteractable.activeHand.Drop();
 
-        m_CurrentInteractable.transform.position = transform.position;
+        nearestInteractable.transform.position = transform.position;
 
-        Rigidbody targetBody = m_CurrentInteractable.GetComponent<Rigidbody>();
-        m_Joint.connectedBody = targetBody;
+        Rigidbody targetBody = nearestInteractable.GetComponent<Rigidbody>();
+        joint.connectedBody = targetBody;
 
-        m_CurrentInteractable.m_ActiveHand = this;
+        nearestInteractable.activeHand = this;
+        currentInteractable = nearestInteractable;
+        nearestInteractable = null;
     }
 
+    /// <summary>
+    /// Used To Drop Objects.
+    /// <para>
+    /// First It Checks Thers Actually And Interactable There,
+    /// Then It Works Out The Force To Apply,
+    /// Then Drops The Object.
+    /// </para>
+    /// </summary>
     public void Drop()
     {
-        if (!m_CurrentInteractable)
+        if (!currentInteractable)
             return;
 
-        Rigidbody targetBody = m_CurrentInteractable.GetComponent<Rigidbody>();
-        targetBody.velocity = m_Pose.GetVelocity();
-        targetBody.angularVelocity = m_Pose.GetAngularVelocity();
+        Rigidbody targetBody = currentInteractable.GetComponent<Rigidbody>();
+        targetBody.velocity = pose.GetVelocity();
+        targetBody.angularVelocity = pose.GetAngularVelocity();
 
-        m_Joint.connectedBody = null;
+        joint.connectedBody = null;
 
-        m_CurrentInteractable.m_ActiveHand = null;
-        m_CurrentInteractable = null;
+        currentInteractable.activeHand = null;
+        currentInteractable = null;
     }
 
+    public void Grab()
+    {
+        transform.GetChild(0).gameObject.SetActive(false);
+        vrController.m_AllowFall = false;
+        vrController.SetHand(this);
+    }
+
+    public void Release()
+    {
+        vrController.ClearHand();
+        vrController.m_AllowFall = true;
+        transform.GetChild(0).gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// Returns The Nearest Interactable.
+    /// <para>
+    /// Uses Square Magnitude To Find The Close Interactable In The List.
+    /// </para>
+    /// </summary>
+    /// <returns>The Nearest Interactable</returns>
     private Interactable GetNearestInteractable()
     {
         Interactable nearest = null;
         float minDistance = float.MaxValue;
         float distance = 0f;
 
-        foreach (Interactable interactable in m_ContactInteractables)
+        foreach (Interactable interactable in contactInteractables)
         {
             distance = (interactable.transform.position - transform.position).sqrMagnitude;
 
@@ -170,21 +217,5 @@ public class Hand : MonoBehaviour
         }
 
         return nearest;
-    }
-
-    public void Grab()
-    {
-        transform.GetChild(0).gameObject.SetActive(false);
-        m_ObjectInHand = true;
-        m_VRController.m_AllowFall = false;
-        m_VRController.SetHand(this);
-    }
-
-    public void Release()
-    {
-        m_VRController.ClearHand();
-        m_VRController.m_AllowFall = true;
-        m_ObjectInHand = false;
-        transform.GetChild(0).gameObject.SetActive(true);
     }
 }

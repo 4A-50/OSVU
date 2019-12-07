@@ -7,40 +7,77 @@ using MyBox;
 [RequireComponent(typeof(Rigidbody))]
 public class Interactable : MonoBehaviour
 {
-    public enum InteractableType {Throwable, Object, ClimbingPoint, Gun};
-    public InteractableType m_Type;
+    //The Type Of Interactable This Is
+    public enum InteractableType { Throwable, Object, ClimbingPoint, Gun };
+    public InteractableType Type;
 
+    //How It's Picked Up
+    public enum PickUpType { Hold, Toggle };
+    public PickUpType holdType;
+
+    //Hand Its Being Held By
     [HideInInspector]
-    public Hand m_ActiveHand = null;
+    public Hand activeHand = null;
 
-    private Rigidbody m_Rigidbody = null;
+    //This Objects Rigidbody
+    private Rigidbody rb = null;
 
-    //Throwable Vars
-    [ConditionalField(nameof(m_Type), false, InteractableType.Throwable)]
-    public bool m_Bouncy = false;
+    #region Throwable Vars
+    //Is The Object Bouncy
+    [ConditionalField(nameof(Type), false, InteractableType.Throwable)]
+    public bool bouncy = false;
+    #endregion
 
-    //Object Vars
-    [ConditionalField(nameof(m_Type), false, InteractableType.Object)]
-    public bool m_TogglePickUp = false;
+    #region Object Vars
+    #endregion
 
-    //Climbing Point Vars
-    [ConditionalField(nameof(m_Type), false, InteractableType.ClimbingPoint)]
-    public bool m_Climbable = false;
+    #region Climbing Point Vars
+    //Is This Climbing Point Actually Climbable
+    [ConditionalField(nameof(Type), false, InteractableType.ClimbingPoint)]
+    public bool climbable = false;
+    #endregion
 
-    //Gun Vars
-    public enum FireMode {Single, Burst, FullAuto};
-    [ConditionalField(nameof(m_Type), false, InteractableType.Gun)] public FireMode m_FireMode;
-    [ConditionalField(nameof(m_FireMode), true, FireMode.Single)] public float m_FireRate = 0.5f;   
-    [ConditionalField(nameof(m_Type), false, InteractableType.Gun)] public string m_MagazineTag;
+    #region Gun Vars
+    //Gun's Fire Modes
+    public enum FireMode { Single, Burst, FullAuto };
+    [ConditionalField(nameof(Type), false, InteractableType.Gun)] public FireMode fireMode;
+    //Guns Fire Rate (If Its Not In Single Shot
+    [ConditionalField(nameof(fireMode), true, FireMode.Single)] public float fireRate = 0.5f;   
+    //The Guns Magazine Tag
+    [ConditionalField(nameof(Type), false, InteractableType.Gun)] public string magazineTag;
+    #endregion
 
     private void Awake()
     {
-        m_Rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
 
-        if (m_Type == InteractableType.ClimbingPoint)
+        if (Type == InteractableType.ClimbingPoint)
         {
-            m_Rigidbody.useGravity = false;
-            m_Rigidbody.isKinematic = true;
+            rb.useGravity = false;
+            rb.isKinematic = true;
+        }
+    }
+
+    /// <summary>
+    /// Updates Some Vars When They Are Changed In The Inspector.
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        if (Type == InteractableType.Object)
+        {
+            if (holdType != PickUpType.Toggle)
+                holdType = PickUpType.Toggle;
+
+        }
+        else if (Type == InteractableType.Gun)
+        {
+            if (holdType != PickUpType.Toggle)
+                holdType = PickUpType.Toggle;
+        }
+        else
+        {
+            if (holdType != PickUpType.Hold)
+                holdType = PickUpType.Hold;
         }
     }
 }

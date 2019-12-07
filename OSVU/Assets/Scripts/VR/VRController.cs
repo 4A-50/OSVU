@@ -43,9 +43,11 @@ public class VRController : MonoBehaviour
 
     /// <summary>
     /// Handles The Head Rotation.
+    /// <para>
     /// Starts By Saving The Current Pos And Rot,
     /// Then Rotates The GameObject,
     /// Then Resets The Camera Rig To The Previous Position.
+    /// </para>
     /// </summary>
     private void HandleHead()
     {
@@ -60,9 +62,11 @@ public class VRController : MonoBehaviour
 
     /// <summary>
     /// Calculates The Movement Amount And Them Moves The Character Controller.
+    /// <para>
     /// Starts By Working Out Where The Headset Is Facing,
     /// Then Checks If The Buttons Been Pressed,
     /// If It Has It Works Out The Move And Moves It.
+    /// </para>
     /// </summary>
     private void CalculateMovement()
     {
@@ -88,7 +92,7 @@ public class VRController : MonoBehaviour
         }
         else
         {
-            movement += m_CurrentClimbHand.m_Delta * m_ClimbSensitivity;
+            movement += m_CurrentClimbHand.delta * m_ClimbSensitivity;
         }
 
         m_CharacterController.Move(movement * Time.deltaTime);
@@ -96,8 +100,10 @@ public class VRController : MonoBehaviour
 
     /// <summary>
     /// Works Out The Distance From The Headset To The Ground, Then Sets The CC's Hieght To It.
+    /// <para>
     /// Halfs The Height Then Recenters It,
     /// Then It Aligns The CC To The Correct Position.
+    /// </para>
     /// </summary>
     private void HandleHeight()
     {
