@@ -37,4 +37,3 @@ Create an issue on the project's repository and provide the following informatio
 - Use a clear and descriptive title for your idea.
 - Provide a step-by-step description of the idea in as many details as possible.
 - Provide specific examples to demonstrate the steps. It's always better to get more information. You can include links to files or GitHub projects, code snippets and even print screens or animated GIFS. If you're providing snippets in the issue, use Markdown code blocks.
-- Provide a specific use case - Often we get requests for a feature not realizing there is already a way to fulfil their use case. In other words, don't just give us a solution, give us a problem.
