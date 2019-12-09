@@ -1,7 +1,7 @@
 # Contributing To OSVU
 Thanks for having a look on how to contribute. This is definitely not a solo project and any help I can get is more than appreciated.
 
-If u have an idea of something that should be added, check the [roadmap](https://app.gitkraken.com/glo/board/XeTm5ecC6AAPsU5b "RoadMap") first just to make sure it’s not either already in development or planned.
+If u have an idea of something that should be added, check the [roadmap](https://app.gitkraken.com/glo/board/XeTm5ecC6AAPsU5b) first just to make sure it’s not either already in development or planned.
 
 # How To Contribute
 ## Testing
@@ -29,7 +29,7 @@ Also It Helps To Include details about your configuration and environment:
 - Any other information that could be useful about your environment
 
 ## Submitting An Idea
-Before submitting a new idea, please check the list of idea suggestions in the issue tracker and the roadmap as you might find out that you don't need to create one. When submitting an idea add as much detail as possible, it’s a lot easier for someone to make it if they know 100% what u mean.
+Before submitting a new idea, please check the list of idea suggestions in the [issue tracker](https://github.com/4A-50/OSVU/issues) and the [roadmap](https://app.gitkraken.com/glo/board/XeTm5ecC6AAPsU5b) as you might find out that you don't need to create one. When submitting an idea add as much detail as possible, it’s a lot easier for someone to make it if they know 100% what u mean.
 
 ### How To Submit A Good Idea:
 
