@@ -14,24 +14,25 @@ public class Hand : MonoBehaviour
     public string interactableTag;
 
     //The Hands Delta (Used For Climbing)
-    public Vector3 delta { private set; get; } = Vector3.zero;
+    public Vector3 delta = Vector3.zero; // { private set; get; }
     //Hands Last Position
-    private Vector3 lastPosition = Vector3.zero;
+    Vector3 lastPosition = Vector3.zero;
 
     //Hand Controllers
-    private SteamVR_Behaviour_Pose pose = null;
-    private SteamVR_Behaviour_Skeleton skeleton = null;
-    private FixedJoint joint = null;
+    [HideInInspector]
+    public SteamVR_Behaviour_Pose pose = null;
+    SteamVR_Behaviour_Skeleton skeleton = null;
+    FixedJoint joint = null;
 
     //Current In Hand Interactable
-    private Interactable currentInteractable = null;
+    Interactable currentInteractable = null;
     //All The Nearby Interactables
-    private List<Interactable> contactInteractables = new List<Interactable>();
+    List<Interactable> contactInteractables = new List<Interactable>();
     //Nearest Interactable
-    private Interactable nearestInteractable = null;
+    Interactable nearestInteractable = null;
 
     //The Controller Script
-    private VRController vrController = null;
+    VRController vrController = null;
 
     private void Awake()
     {
@@ -52,7 +53,7 @@ public class Hand : MonoBehaviour
         {
             nearestInteractable = GetNearestInteractable();
 
-            if (nearestInteractable.climbable != true)
+            if (nearestInteractable.climbable == false)
             {
                 if (grabAction.GetStateDown(pose.inputSource) && nearestInteractable.holdType == Interactable.PickUpType.Toggle)
                 {
@@ -139,20 +140,21 @@ public class Hand : MonoBehaviour
     /// </summary>
     public void Pickup()
     {
-        if (!currentInteractable)
+        /*if (!currentInteractable)
             return;
 
         if (currentInteractable.activeHand)
-            currentInteractable.activeHand.Drop();
+            currentInteractable.activeHand.Drop();*/
 
-        nearestInteractable.transform.position = transform.position;
-
-        Rigidbody targetBody = nearestInteractable.GetComponent<Rigidbody>();
-        joint.connectedBody = targetBody;
-
-        nearestInteractable.activeHand = this;
         currentInteractable = nearestInteractable;
         nearestInteractable = null;
+
+        currentInteractable.transform.position = transform.position;
+
+        Rigidbody targetBody = currentInteractable.GetComponent<Rigidbody>();
+        joint.connectedBody = targetBody;
+
+        currentInteractable.activeHand = this;
     }
 
     /// <summary>
@@ -181,14 +183,14 @@ public class Hand : MonoBehaviour
     public void Grab()
     {
         transform.GetChild(0).gameObject.SetActive(false);
-        vrController.m_AllowFall = false;
+        vrController.movementType = VRController.MovementType.Climbing;
         vrController.SetHand(this);
     }
 
     public void Release()
     {
         vrController.ClearHand();
-        vrController.m_AllowFall = true;
+        vrController.movementType = VRController.MovementType.Ground;
         transform.GetChild(0).gameObject.SetActive(true);
     }
 

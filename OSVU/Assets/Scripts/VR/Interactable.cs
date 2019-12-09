@@ -8,11 +8,11 @@ using MyBox;
 public class Interactable : MonoBehaviour
 {
     //The Type Of Interactable This Is
-    public enum InteractableType { Throwable, Object, ClimbingPoint, Gun };
+    public enum InteractableType {Throwable, Object, ClimbingPoint, Gun};
     public InteractableType Type;
 
     //How It's Picked Up
-    public enum PickUpType { Hold, Toggle };
+    public enum PickUpType {Hold, Toggle};
     public PickUpType holdType;
 
     //Hand Its Being Held By
@@ -20,7 +20,7 @@ public class Interactable : MonoBehaviour
     public Hand activeHand = null;
 
     //This Objects Rigidbody
-    private Rigidbody rb = null;
+    Rigidbody rb = null;
 
     #region Throwable Vars
     //Is The Object Bouncy
@@ -38,9 +38,14 @@ public class Interactable : MonoBehaviour
     #endregion
 
     #region Gun Vars
+    //Gun Types
+    public enum GunType {Bullet, Lazer};
+    [ConditionalField(nameof(Type), false, InteractableType.Gun)] public GunType gunType;
     //Gun's Fire Modes
-    public enum FireMode { Single, Burst, FullAuto };
+    public enum FireMode {Single, Burst, FullAuto};
     [ConditionalField(nameof(Type), false, InteractableType.Gun)] public FireMode fireMode;
+    //The Steam VR Action To Fire The Gun
+    [ConditionalField(nameof(Type), false, InteractableType.Gun)] public SteamVR_Action_Boolean shootAction = null;
     //Guns Fire Rate (If Its Not In Single Shot
     [ConditionalField(nameof(fireMode), true, FireMode.Single)] public float fireRate = 0.5f;   
     //The Guns Magazine Tag
@@ -58,26 +63,14 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Updates Some Vars When They Are Changed In The Inspector.
-    /// </summary>
-    private void OnDrawGizmos()
+    private void Update()
     {
-        if (Type == InteractableType.Object)
+        if (Type == InteractableType.Gun && activeHand != null)
         {
-            if (holdType != PickUpType.Toggle)
-                holdType = PickUpType.Toggle;
-
-        }
-        else if (Type == InteractableType.Gun)
-        {
-            if (holdType != PickUpType.Toggle)
-                holdType = PickUpType.Toggle;
-        }
-        else
-        {
-            if (holdType != PickUpType.Hold)
-                holdType = PickUpType.Hold;
+            if (shootAction.GetStateDown(activeHand.pose.inputSource))
+            {
+                print("Shoot");
+            }
         }
     }
 }

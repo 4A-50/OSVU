@@ -5,33 +5,35 @@ using Valve.VR;
 
 public class VRController : MonoBehaviour
 {
-    public float m_Sensitivity = 0.1f;
-    public float m_MaxSpeed = 0.1f;
-    public float m_Gravity = 200f;
-    public float m_ClimbSensitivity = 45f;
+    public float sensitivity = 0.1f;
+    public float maxSpeed = 0.1f;
+    public float gravity = 200f;
+    public float climbSensitivity = 45f;
 
-    //[HideInInspector]
-    public bool m_AllowFall = true;
+    public enum MovementType {Ground, Climbing, Flying};
+    [HideInInspector]
+    public MovementType movementType;
+
     [SerializeField]
-    private Hand m_CurrentClimbHand = null;
+    Hand currentClimbHand = null;
 
-    public SteamVR_Action_Vector2 m_MoveValue = null;
+    public SteamVR_Action_Vector2 moveValue = null;
 
-    private float m_Speed = 0.0f;
+    float speed = 0.0f;
 
-    private CharacterController m_CharacterController = null;
-    private Transform m_CameraRig = null;
-    private Transform m_Head = null;
+    CharacterController characterController = null;
+    Transform cameraRig = null;
+    Transform head = null;
 
     private void Awake()
     {
-        m_CharacterController = GetComponent<CharacterController>();
+        characterController = GetComponent<CharacterController>();
     }
 
     private void Start()
     {
-        m_CameraRig = SteamVR_Render.Top().origin;
-        m_Head = SteamVR_Render.Top().head;
+        cameraRig = SteamVR_Render.Top().origin;
+        head = SteamVR_Render.Top().head;
     }
     
     private void Update()
@@ -51,13 +53,13 @@ public class VRController : MonoBehaviour
     /// </summary>
     private void HandleHead()
     {
-        Vector3 oldPosition = m_CameraRig.position;
-        Quaternion oldRotation = m_CameraRig.rotation;
+        Vector3 oldPosition = cameraRig.position;
+        Quaternion oldRotation = cameraRig.rotation;
 
-        transform.eulerAngles = new Vector3(0, m_Head.rotation.eulerAngles.y, 0);
+        transform.eulerAngles = new Vector3(0, head.rotation.eulerAngles.y, 0);
 
-        m_CameraRig.position = oldPosition;
-        m_CameraRig.rotation = oldRotation;
+        cameraRig.position = oldPosition;
+        cameraRig.rotation = oldRotation;
     }
 
     /// <summary>
@@ -67,35 +69,42 @@ public class VRController : MonoBehaviour
     /// Then Checks If The Buttons Been Pressed,
     /// If It Has It Works Out The Move And Moves It.
     /// </para>
+    /// <para>
+    /// If The Player Is Climbing Then It Works Out The Hands
+    /// Delta And Multiplys That By The Sensitivity, And Moves
+    /// The Player.
+    /// </para>
     /// </summary>
     private void CalculateMovement()
     {
-        Vector3 movement = Vector3.zero;
-
-        if (m_AllowFall == true)
+        if (movementType == MovementType.Ground)
         {
-            float rotation = Mathf.Atan2(m_MoveValue.axis.x, m_MoveValue.axis.y);
+            float rotation = Mathf.Atan2(moveValue.axis.x, moveValue.axis.y);
             rotation *= Mathf.Rad2Deg;
             Vector3 orientationEuler = new Vector3(0, transform.eulerAngles.y + rotation, 0);
             Quaternion orientation = Quaternion.Euler(orientationEuler);
+            Vector3 movement = Vector3.zero;
 
-            if (m_MoveValue.axis.magnitude == 0)
-                m_Speed = 0;
+            if (moveValue.axis.magnitude == 0)
+                speed = 0;
 
 
-            m_Speed += m_MoveValue.axis.magnitude * m_Sensitivity;
-            m_Speed = Mathf.Clamp(m_Speed, -m_MaxSpeed, m_MaxSpeed);
+            speed += moveValue.axis.magnitude * sensitivity;
+            speed = Mathf.Clamp(speed, -maxSpeed, maxSpeed);
 
-            movement += orientation * (m_Speed * Vector3.forward);
+            movement += orientation * (speed * Vector3.forward);
 
-            movement.y -= m_Gravity * Time.deltaTime;
+            movement.y -= gravity * Time.deltaTime;
+            characterController.Move(movement * Time.deltaTime);
         }
-        else
+        else if(movementType == MovementType.Climbing)
         {
-            movement += m_CurrentClimbHand.delta * m_ClimbSensitivity;
-        }
+            Vector3 movement = Vector3.zero;
 
-        m_CharacterController.Move(movement * Time.deltaTime);
+            movement += currentClimbHand.delta * climbSensitivity;
+
+            characterController.Move(movement * Time.deltaTime);
+        }
     }
 
     /// <summary>
@@ -107,19 +116,19 @@ public class VRController : MonoBehaviour
     /// </summary>
     private void HandleHeight()
     {
-        float headHeight = Mathf.Clamp(m_Head.localPosition.y, 1, 2);
-        m_CharacterController.height = headHeight;
+        float headHeight = Mathf.Clamp(head.localPosition.y, 1, 2);
+        characterController.height = headHeight;
 
         Vector3 newCenter = Vector3.zero;
-        newCenter.y = m_CharacterController.height / 2;
-        newCenter.y += m_CharacterController.skinWidth;
+        newCenter.y = characterController.height / 2;
+        newCenter.y += characterController.skinWidth;
 
-        newCenter.x = m_Head.localPosition.x;
-        newCenter.z = m_Head.localPosition.z;
+        newCenter.x = head.localPosition.x;
+        newCenter.z = head.localPosition.z;
 
         newCenter = Quaternion.Euler(0, -transform.eulerAngles.y, 0) * newCenter;
 
-        m_CharacterController.center = newCenter;
+        characterController.center = newCenter;
     }
 
     /// <summary>
@@ -128,10 +137,10 @@ public class VRController : MonoBehaviour
     /// <param name="hand">Climbing Hand</param>
     public void SetHand(Hand hand)
     {
-        if (m_CurrentClimbHand)
-            m_CurrentClimbHand.Release();
+        if (currentClimbHand)
+            currentClimbHand.Release();
 
-        m_CurrentClimbHand = hand;
+        currentClimbHand = hand;
     }
 
     /// <summary>
@@ -139,6 +148,6 @@ public class VRController : MonoBehaviour
     /// </summary>
     public void ClearHand()
     {
-        m_CurrentClimbHand = null;
+        currentClimbHand = null;
     }
 }
