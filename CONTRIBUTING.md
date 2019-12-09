@@ -12,7 +12,7 @@ Obviously check that this bug isn’t already know and if it isn’t then good n
 
 ### How To Submit A Good Bug Report:
 
-Create an issue on the project's repository and provide the following information.
+[Create an issue](https://github.com/4A-50/OSVU/issues/new?template=bug_report.md) on the project's repository and provide the following information.
 
 Explain the problem and include additional details to help someone reproduce the problem:
 - Use a clear and descriptive title for the issue to identify the problem.
@@ -33,7 +33,7 @@ Before submitting a new idea, please check the list of idea suggestions in the i
 
 ### How To Submit A Good Idea:
 
-Create an issue on the project's repository and provide the following information:
+[Create an issue](https://github.com/4A-50/OSVU/issues/new?template=feature_request.md) on the project's repository and provide the following information:
 - Use a clear and descriptive title for your idea.
 - Provide a step-by-step description of the idea in as many details as possible.
 - Provide specific examples to demonstrate the steps. It's always better to get more information. You can include links to files or GitHub projects, code snippets and even print screens or animated GIFS. If you're providing snippets in the issue, use Markdown code blocks.
