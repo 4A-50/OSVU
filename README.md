@@ -1,6 +1,6 @@
 ![OSVU Banner](https://imgur.com/jSxu49k.png "OSVU")
 
-Open Source Virtual Universe, is a VR MMORPG where u can travel this universe to play on different planets (different servers) and basic do anything you want.
+Open Source Virtual Universe, is a VR MMORPG where u can travel this universe to play on different planets (different servers) and do anything you want! From playing mini games with friends, to exploring a planet, to fighting of waves of enemys (AI or real people) for some sweet loot!
 
 ## Road Map
 Want to see whats planned for the game? [Check Out Our Roadmap!](https://app.gitkraken.com/glo/board/XeTm5ecC6AAPsU5b "RoadMap")
