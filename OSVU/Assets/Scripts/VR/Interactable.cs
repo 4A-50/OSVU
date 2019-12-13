@@ -4,7 +4,6 @@ using UnityEngine;
 using Valve.VR;
 using MyBox;
 
-[RequireComponent(typeof(Rigidbody))]
 public class Interactable : MonoBehaviour
 {
     //The Type Of Interactable This Is
@@ -20,6 +19,7 @@ public class Interactable : MonoBehaviour
     public Hand activeHand = null;
 
     //This Objects Rigidbody
+    [SerializeField]
     Rigidbody rb = null;
 
     #region Throwable Vars
@@ -51,17 +51,6 @@ public class Interactable : MonoBehaviour
     //The Guns Magazine Tag
     [ConditionalField(nameof(Type), false, InteractableType.Gun)] public string magazineTag;
     #endregion
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-
-        if (Type == InteractableType.ClimbingPoint)
-        {
-            rb.useGravity = false;
-            rb.isKinematic = true;
-        }
-    }
 
     private void Update()
     {
