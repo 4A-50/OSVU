@@ -22,6 +22,9 @@ public class Interactable : MonoBehaviour
     //This Objects Rigidbody
     Rigidbody rb = null;
 
+    //The Objects Skeleton Poser
+    public SteamVR_Skeleton_Poser skelPoser = null;
+    
     #region Throwable Vars
     //Is The Object Bouncy
     [ConditionalField(nameof(Type), false, InteractableType.Throwable)]

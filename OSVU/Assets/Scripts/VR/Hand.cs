@@ -153,6 +153,7 @@ public class Hand : MonoBehaviour
 
         Rigidbody targetBody = currentInteractable.GetComponent<Rigidbody>();
         joint.connectedBody = targetBody;
+        skeleton.BlendToPoser(currentInteractable.skelPoser);
 
         currentInteractable.activeHand = this;
     }
