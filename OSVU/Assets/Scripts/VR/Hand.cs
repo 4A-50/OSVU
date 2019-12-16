@@ -16,7 +16,7 @@ public class Hand : MonoBehaviour
     //The Hands Delta (Used For Climbing)
     public Vector3 delta = Vector3.zero; // { private set; get; }
     //Hands Last Position
-    public Vector3 lastPosition = Vector3.zero;
+    Vector3 lastPosition = Vector3.zero;
 
     //Hand Controllers
     [HideInInspector]
