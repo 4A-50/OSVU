@@ -14,5 +14,6 @@ Any help is always appreciated, so fork the repo and get cracking. But don't for
 ### Credit To:
 [MyBox By Deadcows](https://github.com/Deadcows/MyBox "MyBox")
 
+[Hologram Shader By Andydbc](https://github.com/andydbc/HologramShader "Hologram Shader")
 
 ![OSVU Social Preview](https://i.imgur.com/Zx20z0n.png "OSVU")
