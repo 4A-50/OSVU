@@ -50,6 +50,20 @@ public class Lift : MonoBehaviour
         }
     }
 
+    public void Move()
+    {
+        if (open == true && transform.position == topPos)
+        {
+            open = false;
+            allowMoveDown = true;
+        }
+        else if (open == false && transform.position == bottomPos)
+        {
+            open = true;
+            allowMoveUp = true;
+        }
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
