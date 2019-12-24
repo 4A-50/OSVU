@@ -3,6 +3,8 @@ Thanks for having a look on how to contribute. This is definitely not a solo pro
 
 If u have an idea of something that should be added, check the [roadmap](https://app.gitkraken.com/glo/board/XeTm5ecC6AAPsU5b) first just to make sure it’s not either already in development or planned.
 
+But make sure you don't bring copywrited work into OSVU!
+
 # How To Contribute
 ## Testing
 The best way to test OSVU is to just play it. Just download a copy of the files and play! Keep us in the loop if u find any bugs by submitting an issue (just check it's not already one).
