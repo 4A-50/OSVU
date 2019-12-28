@@ -5,6 +5,8 @@ If u have an idea of something that should be added, check the [roadmap](https:/
 
 But make sure you don't bring copywrited work into OSVU!
 
+And with your pull request feel free to add your Discord tag (e.g. wumpus#0267) so you can get the Contributors role.
+
 # How To Contribute
 ## Testing
 The best way to test OSVU is to just play it. Just download a copy of the files and play! Keep us in the loop if u find any bugs by submitting an issue (just check it's not already one).
