@@ -10,6 +10,8 @@ public class LightBlinker : MonoBehaviour
     public float blinkSpeed = 0.5f;
     public bool blinking = true;
 
+    public Renderer lightRend;
+
     void Start()
     {
         lightToBlink = GetComponent<Light>();
@@ -21,8 +23,16 @@ public class LightBlinker : MonoBehaviour
         while(blinking == true)
         {
             lightToBlink.enabled = true;
+            if (lightRend != null)
+            {
+                lightRend.material.EnableKeyword("_EMISSION");
+            }
             yield return new WaitForSeconds(blinkSpeed);
             lightToBlink.enabled = false;
+            if (lightRend != null)
+            {
+                lightRend.material.DisableKeyword("_EMISSION");
+            }
             yield return new WaitForSeconds(blinkSpeed);
         }
        
