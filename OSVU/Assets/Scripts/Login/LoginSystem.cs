@@ -17,9 +17,16 @@ public class LoginSystem : MonoBehaviour
 
     void Start()
     {
-        string[] build = System.IO.File.ReadAllLines(@"buildIdentifier.txt");
+        if (System.IO.File.Exists(@"buildIdentifier.txt"))
+        {
+            string[] build = System.IO.File.ReadAllLines(@"buildIdentifier.txt");
 
-        if (build[0] != build[1])
+            if (build[0] != build[1])
+            {
+                gitHub.SetActive(true);
+            }
+        }
+        else
         {
             gitHub.SetActive(true);
         }
