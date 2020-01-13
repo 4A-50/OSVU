@@ -9,6 +9,7 @@ Want to see whats planned for the game? [Check Out Our Roadmap!](https://app.git
 
 ## Want To Play OSVU?
 At the moment the best way to play is just to use the master branch (as its pretty much guaranteed to work), but when the game gets to an actual playable/fun state it will be released on [Discord](https://discord.gg/xWx2p8g), and maybe Itch.io and Steam.
+When the game is released players who build from here the game will not be able to play with users who download from it Discord, as a way to prevent crashes, cheats etc.
 
 ## Want To Help Work On OSVU?
 Any help is always appreciated, so fork the repo and get cracking. But don't forget to read the [contributing guidelines](https://github.com/4A-50/OSVU/blob/master/CONTRIBUTING.md).
