@@ -18,4 +18,6 @@ Any help is always appreciated, so fork the repo and get cracking. But don't for
 
 [Hologram Shader By Andydbc](https://github.com/andydbc/HologramShader "Hologram Shader")
 
+[Metal Material Pack By Julio Sillet](https://gumroad.com/juliosillet#XiPKY "Metal Materials")
+
 ![OSVU Social Preview](https://i.imgur.com/Zx20z0n.png "OSVU")
