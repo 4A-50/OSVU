@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
+using System.Net;
 
 public class LoginSystem : MonoBehaviour
 {
@@ -12,16 +14,23 @@ public class LoginSystem : MonoBehaviour
     public GameObject error;
     public GameObject gitHub;
 
-    public GameObject playVR;
-    public GameObject startServer;
+    public UnityEngine.UI.Button playVR;
+    public UnityEngine.UI.Button startServer;
 
     void Start()
     {
         if (System.IO.File.Exists(@"buildIdentifier.txt"))
         {
-            string[] build = System.IO.File.ReadAllLines(@"buildIdentifier.txt");
+            string[] build= System.IO.File.ReadAllLines(@"buildIdentifier.txt");
 
-            if (build[0] != build[1])
+            string webResponse = new WebClient().DownloadString(build[2]);
+
+            if (build[0] == build[1] && webResponse == build[0])
+            {
+                Globals.buildInfo = build;
+                Globals.authed = true;
+            }
+            else
             {
                 gitHub.SetActive(true);
             }
@@ -42,16 +51,21 @@ public class LoginSystem : MonoBehaviour
         List<IMultipartFormSection> form = new List<IMultipartFormSection>();
         form.Add(new MultipartFormDataSection("uid=" + username.text + "&pwd=" + password.text));
 
-        UnityWebRequest www = UnityWebRequest.Post("", form);
-        yield return www;
-        if (www.downloadHandler.text == "Login Success")
+        if (Globals.authed == true)
         {
-            playVR.SetActive(true);
-            startServer.SetActive(true);
-        }
-        else
-        {
-            error.SetActive(true);
+            UnityWebRequest www = UnityWebRequest.Post(Globals.buildInfo[3], form);
+
+            yield return www;
+            if (www.downloadHandler.text == "Login Success")
+            {
+                Globals.userName = username.text;
+                playVR.interactable = true;
+                startServer.interactable = true;
+            }
+            else
+            {
+                error.SetActive(true);
+            }
         }
     }
 }
