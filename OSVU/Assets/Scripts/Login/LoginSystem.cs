@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
 using System.Net;
+using Valve.VR;
 
 public class LoginSystem : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class LoginSystem : MonoBehaviour
 
     public UnityEngine.UI.Button playVR;
     public UnityEngine.UI.Button startServer;
+
+    public SteamVR_LoadLevel levelLoader;
 
     void Start()
     {
@@ -67,5 +70,10 @@ public class LoginSystem : MonoBehaviour
                 error.SetActive(true);
             }
         }
+    }
+
+    public void playInVR()
+    {
+        levelLoader.Trigger();
     }
 }
