@@ -12,7 +12,7 @@ public class LoginSystem : MonoBehaviour
     public TMP_InputField username;
     public TMP_InputField password;
 
-    public GameObject error;
+    public GameObject[] errors;
     public GameObject gitHub;
 
     public UnityEngine.UI.Button playVR;
@@ -46,28 +46,36 @@ public class LoginSystem : MonoBehaviour
 
     public void buttonPress()
     {
+        errors[0].SetActive(false);
+        errors[1].SetActive(false);
         StartCoroutine(loginAccount());
     }
 
     IEnumerator loginAccount()
     {
-        List<IMultipartFormSection> form = new List<IMultipartFormSection>();
-        form.Add(new MultipartFormDataSection("uid=" + username.text + "&pwd=" + password.text));
+        WWWForm form = new WWWForm();
+        form.AddField("uid", username.text);
+        form.AddField("pwd", password.text);
+        form.AddField("build", Globals.buildInfo[0]);
 
         if (Globals.authed == true)
         {
             UnityWebRequest www = UnityWebRequest.Post(Globals.buildInfo[3], form);
+            yield return www.SendWebRequest();
 
-            yield return www;
             if (www.downloadHandler.text == "Login Success")
             {
                 Globals.userName = username.text;
                 playVR.interactable = true;
                 startServer.interactable = true;
             }
+            else if (www.downloadHandler.text == "Build Error")
+            {
+                errors[1].SetActive(true);
+            }
             else
             {
-                error.SetActive(true);
+                errors[0].SetActive(true);
             }
         }
     }
@@ -75,5 +83,15 @@ public class LoginSystem : MonoBehaviour
     public void playInVR()
     {
         levelLoader.Trigger();
+    }
+
+    public void serverStart()
+    {
+        //Make Me Do Something
+    }
+
+    public void register()
+    {
+        Application.OpenURL("http://osvu.co.uk/register.php");
     }
 }
