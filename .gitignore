@@ -35,8 +35,5 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-<<<<<<< HEAD
 #Build Identifier
-=======
->>>>>>> Space-Station
 OSVU/buildIdentifier.txt
