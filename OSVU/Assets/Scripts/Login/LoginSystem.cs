@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Net;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
-using System.Net;
 using Valve.VR;
+using Valve.Newtonsoft.Json.Linq;
 
 public class LoginSystem : MonoBehaviour
 {
@@ -68,6 +67,8 @@ public class LoginSystem : MonoBehaviour
                 Globals.userName = username.text;
                 playVR.interactable = true;
                 startServer.interactable = true;
+
+                StartCoroutine(getUserInfo());
             }
             else if (www.downloadHandler.text == "Build Error")
             {
@@ -93,5 +94,17 @@ public class LoginSystem : MonoBehaviour
     public void register()
     {
         Application.OpenURL("http://osvu.co.uk/register.php");
+    }
+
+    IEnumerator getUserInfo()
+    {
+        UnityWebRequest www = UnityWebRequest.Get("http://osvu.co.uk/api/public/getuser.php?username=" + Globals.userName);
+        yield return www.SendWebRequest();
+
+        var json = www.downloadHandler.text;
+        JObject objects = JObject.Parse(json);
+
+        Globals.osvuRank = (string)objects.SelectToken("data.Rank");
+        print(Globals.osvuRank);
     }
 }

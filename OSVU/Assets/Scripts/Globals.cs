@@ -10,4 +10,5 @@ public class Globals : MonoBehaviour
 
     //User Info
     public static string userName;
+    public static string osvuRank;
 }
