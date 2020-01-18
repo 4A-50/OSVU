@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.Serialization;
 
 namespace Mirror
 {
@@ -657,6 +658,8 @@ namespace Mirror
             OnServerChangeScene(newSceneName);
 
             loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName);
+            
+
 
             SceneMessage msg = new SceneMessage()
             {
@@ -1214,7 +1217,10 @@ namespace Mirror
         /// This is invoked when a server is started - including when a host is started.
         /// <para>StartServer has multiple signatures, but they all cause this hook to be called.</para>
         /// </summary>
-        public virtual void OnStartServer() { }
+        public virtual void OnStartServer()
+        {
+
+        }
 
         /// <summary>
         /// Obsolete: Use <see cref="OnStartClient()"/> instead of OnStartClient(NetworkClient client).
@@ -1229,20 +1235,24 @@ namespace Mirror
         /// </summary>
         public virtual void OnStartClient()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
-            OnStartClient(NetworkClient.singleton);
-#pragma warning restore CS0618 // Type or member is obsolete
+
         }
 
         /// <summary>
         /// This is called when a server is stopped - including when a host is stopped.
         /// </summary>
-        public virtual void OnStopServer() { }
+        public virtual void OnStopServer()
+        {
+
+        }
 
         /// <summary>
         /// This is called when a client is stopped.
         /// </summary>
-        public virtual void OnStopClient() { }
+        public virtual void OnStopClient()
+        {
+
+        }
 
         /// <summary>
         /// This is called when a host is stopped.
