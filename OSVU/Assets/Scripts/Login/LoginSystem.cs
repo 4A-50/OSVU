@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using TMPro;
 using Valve.VR;
 using Valve.Newtonsoft.Json.Linq;
+using Mirror;
 
 public class LoginSystem : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class LoginSystem : MonoBehaviour
     public UnityEngine.UI.Button startServer;
 
     public SteamVR_LoadLevel levelLoader;
+
+    [SerializeField]
+    NetworkManager nm;
 
     void Start()
     {
@@ -84,11 +88,12 @@ public class LoginSystem : MonoBehaviour
     public void playInVR()
     {
         levelLoader.Trigger();
+        nm.StartClient();
     }
 
     public void serverStart()
     {
-        //Make Me Do Something
+        nm.StartServer();
     }
 
     public void register()
