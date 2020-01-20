@@ -88,7 +88,7 @@ public class LoginSystem : MonoBehaviour
     public void playInVR()
     {
         levelLoader.Trigger();
-        nm.StartClient();
+        //nm.StartClient();
     }
 
     public void serverStart()
