@@ -3,11 +3,12 @@
     "com.mybox": "https://github.com/Deadcows/MyBox.git",
     "com.unity.collab-proxy": "1.2.16",
     "com.unity.ext.nunit": "1.0.0",
-    "com.unity.ide.rider": "1.1.0",
-    "com.unity.ide.vscode": "1.0.7",
-    "com.unity.test-framework": "1.1.1",
+    "com.unity.ide.rider": "1.1.4",
+    "com.unity.ide.vscode": "1.1.3",
+    "com.unity.nuget.newtonsoft-json": "1.1.2",
+    "com.unity.test-framework": "1.1.9",
     "com.unity.textmeshpro": "2.0.1",
-    "com.unity.timeline": "1.2.2",
+    "com.unity.timeline": "1.2.9",
     "com.unity.ugui": "1.0.0",
     "com.unity.xr.oculus.standalone": "2.38.4",
     "com.unity.xr.openvr.standalone": "2.0.5",
@@ -46,7 +47,7 @@
   "lock": {
     "com.mybox": {
       "revision": "HEAD",
-      "hash": "186fa7cafec3d1093404816f38bbca7f4cdb4be0"
+      "hash": "ce25fa174a05eea8f88cd83972f65f744bb4c6e4"
     }
   }
 }

@@ -1,0 +1,18 @@
+{
+  "application": {
+  "id": 657174744122261537,
+  "manifests": [{
+      "label": "OSVU/Internal",
+      "platforms": ["win32", "win64"],
+      "locales": [],
+      "local_root": ".",
+      "launch_options": [{
+        "name": "OSVU",
+        "executable": "OSVU.exe",
+        "arguments": [],
+        "platforms": ["win32", "win64"],
+        "working_dir": "."
+      }]
+  }]
+ }
+}
