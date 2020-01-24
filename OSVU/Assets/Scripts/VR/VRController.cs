@@ -15,7 +15,7 @@ public class VRController : MonoBehaviour
     public MovementType movementType;
 
     [SerializeField]
-    Hand currentClimbHand = null;
+    Hands currentClimbHand = null;
 
     public SteamVR_Action_Vector2 moveValue = null;
 
@@ -135,7 +135,7 @@ public class VRController : MonoBehaviour
     /// Sets The Hand Thats Being Used For Climbing
     /// </summary>
     /// <param name="hand">Climbing Hand</param>
-    public void SetHand(Hand hand)
+    /*public void SetHand(Hands hand)
     {
         if (currentClimbHand)
             currentClimbHand.Release();
@@ -149,5 +149,5 @@ public class VRController : MonoBehaviour
     public void ClearHand()
     {
         currentClimbHand = null;
-    }
+    }*/
 }
