@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
+    public enum PickUpType { Hold, Toggle };
+    public PickUpType holdType;
+
     [HideInInspector]
     public Hands activeHand;
 
-    Rigidbody rb = null;
+    [HideInInspector]
+    public Rigidbody rb = null;
 
     public Transform primaryAttachmentPoint;
     public Transform[] secondaryAttachmentsPoints;
 
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
