@@ -6,7 +6,7 @@ using Valve.VR;
 [RequireComponent(typeof(Interactable))]
 public class Camera : MonoBehaviour
 {
-    Interactable interactable;
+    Interactable_OLD interactable;
 
     [SerializeField]
     UnityEngine.Camera cam;
@@ -15,7 +15,7 @@ public class Camera : MonoBehaviour
 
     void Start()
     {
-        interactable = GetComponent<Interactable>();
+        interactable = GetComponent<Interactable_OLD>();
     }
 
     void Update()
